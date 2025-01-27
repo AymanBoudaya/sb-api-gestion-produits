@@ -4,7 +4,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import soa.entities.Categorie;
 import soa.entities.Produit;
+import soa.repository.CategorieRepository;
 import soa.repository.ProduitRepository;
 
 @RestController // pour déclarer un service web de type REST
@@ -13,6 +15,8 @@ import soa.repository.ProduitRepository;
 public class ProduitRESTController {
     @Autowired // pour l'injection de dépendances
     private ProduitRepository produitRepos;
+    @Autowired // pour l'injection de dépendances
+    private CategorieRepository categoryRepos;
 
     //  Message d'accueil
     //  http://localhost:8080/produits/index  (GET)
@@ -92,6 +96,44 @@ public class ProduitRESTController {
     public void deleteProduit(@RequestBody Produit p)
     {
         produitRepos.delete(p);
+    }
+
+    @GetMapping(
+            // spécifier le path de la méthode
+            value = "/categorie",
+            // spécifier le format de retour en XML
+            produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}
+    )
+    public List<Categorie> getAllCategories() {
+        return categoryRepos.findAll();
+
+    }
+
+    @PostMapping(
+            // spécifier le path de la méthode
+            value = "/categorie",
+            //spécifier le format de retour
+            produces = {MediaType.APPLICATION_JSON_VALUE}
+    )
+    public Categorie saveCategory(@RequestBody Categorie c) {
+        return categoryRepos.save(c);
+    }
+
+    @PutMapping(
+            // spécifier le path de la méthode
+            value = "/categorie",
+            //spécifier le format de retour
+            produces = {MediaType.APPLICATION_JSON_VALUE}
+    )
+    public Categorie updateCategory(@RequestBody Categorie c) {
+        return categoryRepos.save(c);
+    }
+
+    @DeleteMapping(
+            // spécifier le path de la méthode
+            value = "/categorie")
+    public void deleteCategory(@RequestBody Categorie c) {
+        categoryRepos.delete(c);
     }
 
 }
